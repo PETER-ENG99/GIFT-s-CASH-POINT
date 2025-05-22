@@ -20,21 +20,28 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     summaryDiv.innerHTML = Object.entries(balances)
-      .map(([channel, total]) => `<div class="flex justify-between border-b py-1"><span>${channel}</span><span>${total.toFixed(2)}</span></div>`)
+      .map(([channel, total]) =>
+        `<div class="flex justify-between border-b py-1"><span>${channel}</span><span>${total.toFixed(2)}</span></div>`
+      )
       .join('');
   }
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
+
     const amount = parseFloat(document.getElementById('amount').value);
     const type = document.getElementById('type').value;
     const channel = document.getElementById('channel').value;
 
-    if (isNaN(amount) || amount <= 0) return alert('Enter a valid amount.');
+    if (isNaN(amount) || amount <= 0) {
+      alert('Enter a valid amount.');
+      return;
+    }
 
     const transactions = getTransactions();
     transactions.push({ amount, type, channel, date: new Date().toISOString() });
     saveTransactions(transactions);
+
     form.reset();
     updateSummary();
   });
