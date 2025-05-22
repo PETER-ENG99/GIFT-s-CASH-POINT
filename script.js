@@ -41,3 +41,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   updateSummary();
 });
+function updateSummary() {
+  const transactions = getTransactions();
+  const balances = {};
+
+  transactions.forEach(({ amount, type, channel }) => {
+    if (!balances[channel]) balances[channel] = 0;
+    balances[channel] += type === 'income' ? amount : -amount;
+  });
+
+  summaryDiv.innerHTML = Object.entries(balances)
+    .map(([channel, total]) => `<div class="flex justify-between border-b py-1"><span>${channel}</span><span>${total.toFixed(2)}</span></div>`)
+    .join('');
+}
